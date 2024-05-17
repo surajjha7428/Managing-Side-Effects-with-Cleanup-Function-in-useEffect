@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+        text-align: center;
+    }
+    button{
+        padding: 10px;
+        font-size: 18px;
+        font-family: poppins, sans-serif;
+        font-weight: bold;
+        color: white;
+        background-color: rgb(226, 29, 131);
+        border-radius: 10px;
+        border: 0;
+    }
+
+    button:hover {
+        background-color: white;
+        color: rgb(226, 111, 29);
+        border: 2px solid rgb(226, 111, 29);
+        cursor: pointer;
+    }
+
+    h3 {
+        font-size: 28px;
+        font-family: poppins, sans-serif;
+        font-weight: bold;
+        color:rosybrown;
+
+    }
+  </style>
+  <title>Cleanup Function</title>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+    const { createRoot } = ReactDOM;
+
+    function App() {
+      const [showComponent, setShowComponent] = useState(true);
+
+      return (
+        <>
+        <h3>TIMER APP</h3>
+          <button onClick={() => setShowComponent(!showComponent)}>
+            TOGGLE TIMER COMPONENT
+          </button>
+          {showComponent ? <Timer /> : null}
+        </>
+      );
+    }
+
+    function Timer() {
+      const [count, setCount] = useState(5);
+
+      useEffect(() => {
+        const intervalId = setInterval(() => {
+          setCount((prevCount) => {
+            if (prevCount === 1) {
+              clearInterval(intervalId);
+            }
+            return prevCount - 1;
+          });
+        }, 1000);
+
+        const cleanupFunction = () => {
+          clearInterval(intervalId);
+          console.log("clean up called");
+        };
+        return cleanupFunction;
+      }, []);
+
+      return (
+        <div>
+          <h3>Count : {count}</h3>
+        </div>
+      );
+    }
+
+    
+    const rootElement = createRoot(document.getElementById("root"));
+    rootElement.render(<App />);
+  </script>
+</body>
+</html>
